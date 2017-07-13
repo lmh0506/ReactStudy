@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+        //getDefaultProps 只调用一次  实例之间共享引用  第一个实例第一次初始化时调用
+        //getInitialState  初始化每个实例特有的状态
+        //componentWillMount  render之前最好一次修改状态的机会
+        //render  只能访问this.props 和 this.state  只有一个顶层组件  不允许修改状态和dom输出
+        //componentDidMount  成功render并渲染完成真实DOM之后触发  可以修改DOM
+        $(function(){
+            var count = 0;
+            var style = {
+                color:'red',
+                border:'1px #000 solid'
+            }
+
+            var Hello = React.createClass({
+                getDefaultProps:function(){
+                    console.log('getDefaultProps,1');
+                    return {name:'tom'}
+                },
+                getInitialState:function(){
+                    console.log('getInitialState,2');
+                    return {
+                        myCount:count++,
+                        ready:false
+                    };//必须有返回值 null或者object
+                },
+                componentWillMount:function(){
+                    console.log('componentWillMount,3');
+                    this.setState({ready:true});
+                },
+                render:function(){
+                    console.log('render,4');
+                    return <ul>
+                                <li key="1">1</li>
+                                <li key="2">2</li>
+                                <li key="3">3</li>
+                                <li key="4">{""+this.state.ready}   {this.state.myCount}     </li>
+                            </ul>
+                },
+                componentDidMount:function(){
+                    console.log('componentDidMount,5');
+                    $(ReactDOM.findDOMNode(this)).find('li').append('surprise');//React.findDOMNode(this)  获取的是一个真正的dom元素
+                }
+            });
+            ReactDOM.render(<div style={style} ><Hello /><Hello /></div>,document.getElementById('container'));//每个实例都有自己的状态  通过属性来进行沟通
+        })
+        </script>
+    </body>
+</html>

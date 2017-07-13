@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+        //componentWillUnmount  在删除组件之前进行清理操作  比如计时器和事件监听器
+            $(function(){
+                var count = 0;
+                var style = {
+                    color:'red',
+                    border:'1px #000 solid'
+                }
+                var HelloWorld = React.createClass({
+                    render:function(){
+                        console.log('render,4');
+                        return <p>Hello , {this.props.name ? this.props.name : 'World'}</p>;
+                    },
+                    componentWillUnmount:function(){
+                        console.log('BoooooooooM');
+                    }
+                });
+
+                var HelloUniverse = React.createClass({
+                    getInitialState:function(){
+                        return {name:''};
+                    },
+                    handleChange:function(e){
+                        if(e.target.value == '123')
+                        {
+                            ReactDOM.unmountComponentAtNode(document.getElementById('container'));
+                            return;
+                        }
+                        this.setState({name:e.target.value});
+                    },
+                    render:function(){
+                        /*if(this.state.name == '123')
+                            return <div>
+                                123
+                            </div>*/
+                        return <div>
+                            <HelloWorld name={this.state.name}/>
+                            <br/>
+                            <input type="text" onChange={this.handleChange}  />
+                        </div>
+                    }
+                })
+
+                ReactDOM.render(<div style={style}><HelloUniverse /></div>,document.getElementById('container'));
+            })
+        </script>
+    </body>
+</html>

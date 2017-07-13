@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+
+            $(function(){
+                //不使用mixins
+               /* var BindingExample = React.createClass({
+                    getInitialState:function(){
+                        return {
+                            text:''
+                        }
+                    },
+                    handleChange:function(e){
+                        this.setState({text:e.target.value})
+                    },
+                    render:function(){
+                        return <div>
+                            <input type="text" placeholder="请输入内容" onChange={this.handleChange}/>
+                            <p>{this.state.text}</p>
+                        </div>
+                    }
+                    
+                })*/
+                
+                //使用mixin
+                var BindingMixin = {
+                    handleChange:function(key){
+                        var that = this;
+                        return function(e){
+                            var newState = {};
+                            newState[key] = e.target.value;
+                            that.setState(newState);
+                        }
+                    }
+                }
+
+                var BindingExample = React.createClass({
+                    mixins:[BindingMixin],
+                    getInitialState:function(){
+                        return {
+                            text:'',
+                            comment:''
+                        }
+                    },
+                    render:function(){
+                        return <div>
+                            <input type="text" placeholder="请输入内容" onChange={this.handleChange('text')} />
+                            <textarea onChange={this.handleChange('comment')}></textarea>
+                            <p>{this.state.text}</p>
+                            <p>{this.state.comment}</p>
+                        </div>
+                    }
+                })
+                ReactDOM.render(<BindingExample />,document.getElementById('container'));
+            })
+        </script>
+    </body>
+</html>

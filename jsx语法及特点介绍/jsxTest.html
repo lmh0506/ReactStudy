@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+            var style  = {
+                color:'red',
+                border:'1px #000 solid'
+            }
+            var Hello = React.createClass({
+                getName:function(){
+                    if(this.props.name)
+                        return this.props.name
+                    else
+                        return 'world'
+                },
+                render:function(){
+                    var name = this.getName();//使用变量进行赋值
+                    return <div className="test">Hello {
+                    /*this.props.name?this.props.name:'world'*/  //使用三目表达式赋值
+                    
+                   // name
+
+                   // 直接调用函数赋值
+                   //this.getName()
+
+                   //使用或运算符
+                   //this.props.name || 'world'
+
+                   //使用自执行函数
+                   (function(obj){
+                        if(obj.props.name)
+                            return obj.props.name
+                        else
+                            return 'world'
+                   })(this)
+
+                    }</div>
+                }
+            });
+            ReactDOM.render(<div style={style}><Hello name="react "/></div>,document.getElementById('container'));//给style样式只能以对象的形式复制  不能是字符串
+        </script>
+    </body>
+</html>

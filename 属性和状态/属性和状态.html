@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+
+            $(function(){
+                var ContentList = React.createClass({
+                    render:function(){
+                        return <div>
+                            <p>reply to {this.props.selectName} : </p>
+                            <p>{this.props.inputText}</p>
+                        </div>
+                    }
+                });
+                var Content = React.createClass({//内容组件
+                    getInitialState:function(){
+                        return {
+                            inputText:"",
+                            contentList:[]
+                        }
+                    },
+                    handleChange:function(e){
+                        this.setState({inputText:e.target.value});
+                    },
+                    handleSubmit:function(e){
+                        //给数组状态赋值的三种方法
+                        var child = <ContentList key={this.state.contentList.length} inputText={this.state.inputText} selectName={this.props.selectName} />;
+                        this.setState({contentList:[...this.state.contentList,child]})
+
+                        /*var array = this.state.contentList;
+                        array.push(<ContentList key={this.state.contentList.length} inputText={this.state.inputText} selectName={this.props.selectName} />);
+                        this.setState({contentList:array});*/
+
+                        /*this.state.contentList.push(<ContentList key={this.state.contentList.length} inputText={this.state.inputText} selectName={this.props.selectName} />)
+                        this.setState({contentList:this.state.contentList});*/
+
+                    },
+                    render:function(){
+                        return <div>
+                            <textarea onChange={this.handleChange} placeholder="please enter somthing..."></textarea>
+                            <button onClick={this.handleSubmit}>submit</button>
+                            <div>
+                                {this.state.contentList}
+                            </div>
+                        </div>
+                    }
+                });
+
+                var Comment = React.createClass({//评论组件
+                    getInitialState:function(){
+                        return {
+                            names:['Tim','John','Hank'],//回复对象数组状态
+                            selectName:''//选择的回复对象状态
+                        };
+                    },
+                    handleSelect:function(e){//选择的回复对象改变时触发 
+                        this.setState({selectName:e.target.value});// 改变选择的回复对象状态
+                    },
+                    render :function(){
+                        var options = [];
+                        for(var option in this.state.names){
+                            options.push(<option key={option} value={this.state.names[option]}>{this.state.names[option]}</option>)
+                        }
+                        return <div>
+                            <select onChange={this.handleSelect}>
+                                {options}
+                            </select>
+                            <Content selectName={this.state.selectName?this.state.selectName:this.state.names[0]} />
+                        </div>
+                    }
+                });
+
+                ReactDOM.render(<Comment />,document.getElementById('container'));
+            })
+        </script>
+    </body>
+</html>

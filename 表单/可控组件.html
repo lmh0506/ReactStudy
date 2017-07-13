@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+
+            $(function(){
+                var MyForm = React.createClass({
+                    getInitialState:function(){
+                        return {
+                            helloTo:'Hello World'
+                        }
+                    },
+                    handleChange:function(e){
+                        this.setState({
+                            helloTo:e.target.value
+                        })
+                    },
+                    submitHandler:function(e){
+                        e.preventDefault();
+                        alert(this.state.helloTo);
+                    },
+                    render:function(){
+                        return <form onSubmit={this.submitHandler}>
+                            <input type="text" value={this.state.helloTo} onChange={this.handleChange} />
+                            <br/>
+                            <button type="submit">speak</button>
+                        </form>
+                    }
+                })
+
+                ReactDOM.render(<MyForm />,document.getElementById('container'));
+            })
+        </script>
+    </body>
+</html>

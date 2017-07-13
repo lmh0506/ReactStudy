@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+        //componentWillReceiveProps  父组件修改属性触发，可以修改新属性，修改状态
+        //shouldComponentUpdate  返回false会阻止render调用
+        //componentWillUpdate  不能修改属性和状态
+        //render  只能访问this.props和this.state  只有一个顶层组件  不允许修改状态和DOM输出
+        //componentDidUpdate   可以修改DOM
+        $(function(){
+            var count = 0;
+            var style = {
+                color:'red',
+                border:'1px #000 solid'
+            }
+
+            var HelloWorld = React.createClass({
+                getInitialState:function(){
+                    return {flag:false};
+                },
+                componentWillReceiveProps:function(newProps){
+                    console.log('componentWillReceiveProps,1');
+                    console.log(newProps.name,this.props.name);
+                    if(  this.props.name !== newProps.name)//如果属性值改变则更新状态
+                        this.setState({flag:true});
+                    else
+                        this.setState({flag:false});
+                    console.log(this.state.flag)
+                },  
+                shouldComponentUpdate:function(){
+                    console.log('shouldComponentUpdate,2');
+                    console.log(this.state.flag);
+                    return this.state.flag;
+                },//必须要有返回值 true或false
+                componentWillUpdate:function(){
+                    console.log('componentWillUpdate,3');
+                },
+                render:function(){//页面刷新时只执行该函数  父组件修改属性时其他钩子函数一次执行
+                    console.log('render,4');//如果属性为空则显示world  不为空则显示属性值
+                    return <p>Hello , {this.props.name ? this.props.name : 'World'}</p>;
+                },
+                componentDidUpdate:function(){
+                    console.log('componentDidUpdate,5');
+                    $(ReactDOM.findDOMNode(this)).append('surprise');
+                }
+            });
+            var HelloUniverse = React.createClass({
+                getInitialState:function(){
+                    return {name:''};
+                },
+                handleChange:function(event){
+                    this.setState({name:event.target.value});//将文本框中的值赋值给name状态
+                },
+                render:function(){
+                    return <div>
+                        <HelloWorld name={this.state.name} />//将name状态值传递给子组件的name属性
+                        <br/>
+                        <input type="text" onChange={this.handleChange} />   //文本框中的值发生改变执行handleChange函数
+                    </div>
+                }
+            });
+            ReactDOM.render(<div style={style}><HelloUniverse /></div>,document.getElementById('container'))
+        })
+        </script>
+    </body>
+</html>

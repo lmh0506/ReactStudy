@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+
+            $(function(){
+                var MyForm = React.createClass({
+                    getInitialState:function(){
+                        return {
+                            username:'',
+                            gender:'woman',
+                            checked:false,
+                            radio:'man'
+                        }
+                    },
+                    handleChange:function(name,e){
+                        var newState = {};
+                        newState[name] = name == 'checked' ?e.target.checked:e.target.value;
+                        this.setState(newState);
+                    },
+                    submitHandler:function(e){
+                        e.preventDefault();
+                        console.log(this.state);
+                    },
+                    render:function(){
+                        return <form onSubmit={this.submitHandler}>
+                            <label htmlFor='username'>请输入用户名</label>
+                            <input type="text" id="username" value={this.state.username} onChange={this.handleChange.bind(this,'username')} />
+                            <br/>
+                            <select value={this.state.gender} onChange={this.handleChange.bind(this,'gender')} >
+                                <option value="man">man</option>
+                                <option value="woman">woman</option>
+                            </select>
+                            <br/>
+
+                            <input type="radio" name="gender" id="man" checked={this.state.radio=='man'} value='man' onChange={this.handleChange.bind(this,'radio')} />
+                            <label htmlFor='man'>男</label>
+                            <input type="radio" name="gender" id="woman" checked={this.state.radio=='woman'} value='woman' onChange={this.handleChange.bind(this,'radio')} />
+                            <label htmlFor='woman'>女</label>
+                            <br/>
+                            <input type="checkbox" id="xieyi" checked={this.state.checked} onChange={this.handleChange.bind(this,'checked')} value="" />
+                            <label htmlFor='xieyi'>同意用户协议</label>
+                            <br/>
+                            <button type="submit">注册</button>
+                        </form>
+                    }
+                })
+
+                ReactDOM.render(<MyForm />,document.getElementById('container'));
+            })
+        </script>
+    </body>
+</html>

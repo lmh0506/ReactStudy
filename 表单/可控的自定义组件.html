@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+
+            $(function(){
+                var Radio = React.createClass({
+                    getInitialState:function(){
+                        return {
+                            value:this.props.defaultValue
+                        }
+                    },
+                    handleChange:function(e){
+                        if(this.props.onChange){
+                            this.props.onChange(e);
+                        }
+                        this.setState({
+                            value:e.target.value
+                        });
+                    },
+                    render:function(){
+                        var children = [];
+
+                        var value = this.props.value || this.state.value;//如果父组件没有给value  则默认为defaultValue
+                        React.Children.forEach(this.props.children,function(child,i){//forEach函数第一个参数是被遍历的参数  第二个参数是对第一个参数每次遍历时执行的函数  child是每次遍历的元素  i是索引
+                            //this.props.children是本组件内的子组件 
+                            var label = <label key={i}>
+                                <input type="radio" name={this.props.name} value={child.props.value} checked={child.props.value == value} onChange={this.handleChange} />
+                                {child.props.children}//子组件中的子组件
+                                <br/>
+                            </label>
+
+                            children.push(label);
+                        }.bind(this));//这里的bind是为了将遍历函数里的this指向改为Radio组件
+                        return <span>{children}</span>;
+                    }
+                })
+
+                var MyForm = React.createClass({
+                    getInitialState:function(){
+                        return {
+                            my_radio:'B'
+                        }
+                    },
+                    handleChange:function(e){
+                        this.setState({
+                            my_radio:e.target.value
+                        })
+                    },
+                    submitHanlder:function(e){
+                        e.preventDefault();
+                        alert(this.state.my_radio);
+                    },
+                    render:function(){
+                        return <form onSubmit={this.submitHanlder}>
+                            <Radio name='my_radio' value={this.state.my_radio} onChange={this.handleChange}>
+                                <option value="A">First Option</option>
+                                <option value="B">Second Option</option>
+                                <option value="C">Third Option</option>
+                            </Radio>
+                            <button type="submit">speak</button>
+                        </form>
+                    }
+                })
+                ReactDOM.render(<MyForm />,document.getElementById('container'));
+            })
+        </script>
+    </body>
+</html>

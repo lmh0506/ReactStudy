@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+
+            $(function(){
+                var style = {
+                    width:'50px',
+                    height:'50px',
+                    border:'1px solid #000'
+                }
+                var HelloWorld = React.createClass({
+                    getInitialState:function(){
+                        return {flag:true}
+                    },
+                    handleChange:function(e){
+                        console.log(e.target.value);//e.target是触发事件对应的dom元素
+                    },
+                    handleClick:function(e){
+                        e.target.style.backgroundColor = this.state.flag?'red':'blue';
+                        this.setState({flag:!this.state.flag});
+                    },
+                    render:function(){
+                        return <div>
+                            <div onClick={this.handleClick} style={style}></div>
+                            <input onChange={this.handleChange} />
+                            </div>
+                    }
+                })
+
+                ReactDOM.render(<HelloWorld />,document.getElementById('container'));
+            })
+        </script>
+    </body>
+</html>

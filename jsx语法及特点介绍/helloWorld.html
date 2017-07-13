@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+            var Hello = React.createClass({//建立一个组件类  组件首字母要大写 不然会被认为是普通标签
+                render:function(){//不能使用class  要使用className  因为class是关键字
+                    return <div className="test">Hello {this.props.name}</div>
+                }
+            });
+            ReactDOM.render(<Hello name="World"/>,document.getElementById('container'));
+        </script>
+    </body>
+</html>

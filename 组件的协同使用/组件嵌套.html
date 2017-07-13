@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js"></script>
+    <script src="../build/jquery.min.js"></script>
+    <script src="../build/react.js"></script>
+    <script src="../build/react-dom.js"></script>
+    <script src="../build/browser.min.js"></script>
+    <body>
+        <div id="container"></div>
+        <script type="text/babel">
+
+            $(function(){
+                var GenderSelect = React.createClass({
+                    render:function(){//接收父组件传来的函数属性  作为自己的事件函数  从而改变父组件的状态
+                        return <select onChange={this.props.handleSelect}>
+                            <option value="0">男</option>
+                            <option value="1">女</option>
+                        </select>
+                    }
+                })
+                var SignupForm = React.createClass({
+                    getInitialState:function(){
+                        return {
+                            name:'',
+                            password:'',
+                            gender:''
+                        }
+                    },
+                    handleChange:function(name,e){
+                        var newState = {};
+                        newState[name] = e.target.value;
+                        this.setState(newState);
+                    },
+                    handleSelect:function(e){
+                        this.setState({gender:e.target.value})
+                    },
+                    render:function(){
+                        console.log(this.state);//bind第一个参数为函数中this的指向  第二个参数对应函数中的参数  返回值是一个新函数
+                        return <form>
+                            <input type="text" placeholder='请输入用户名' onChange={this.handleChange.bind(this,'name')} />
+                            <input type="password" placeholder='请输入密码' onChange={this.handleChange.bind(this,'password')} />
+                            <GenderSelect handleSelect={this.handleSelect} />
+                        </form>
+                    }
+                })
+                ReactDOM.render(<SignupForm />,document.getElementById('container'));
+            })
+        </script>
+    </body>
+</html>
